@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <time.h>
+#include <sys/time.h>
 #include <pthread.h>
 
 const int MAX_ITERATIONS = 1000 * 1000 * 1000;
@@ -38,8 +38,8 @@ void *helperThread(void *pGreatest)
 }
 
 int main() {
-  struct timespec tStartTime;
-  clock_gettime(CLOCK_MONOTONIC, &tStartTime);
+  struct timeval tStartTime;
+  gettimeofday(&tStartTime, NULL);
 
   srand(time(0));
 
@@ -63,10 +63,10 @@ int main() {
     }
   }
 
-  struct timespec tEndTime;
-  clock_gettime(CLOCK_MONOTONIC, &tEndTime);
+  struct timeval tEndTime;
+  gettimeofday(&tEndTime, NULL);
 
-  printf("Elapsed Time: %f\n", (double)(tEndTime.tv_sec - tStartTime.tv_sec) + (double)(tEndTime.tv_nsec - tStartTime.tv_nsec) / 1000 / 1000 / 1000);
+  printf("Elapsed Time: %f\n", (double)(tEndTime.tv_sec - tStartTime.tv_sec) + (double)(tEndTime.tv_usec - tStartTime.tv_usec) / 1000 / 1000);
   printf("Highest Ones Roll: %d\n", nHighest);
   printf("Number of Roll Sessions: %d\n", MAX_ITERATIONS);
 }
